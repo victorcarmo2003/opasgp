@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "Opa&SGP",
+  "version": "1.0",
+  "description": "Recursos adicionais para o OpaSuite! Com integração ao SGP.",
+  "permissions": ["activeTab", "scripting"],
+  "action": {
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://atendimento.fibranetbrasil.com.br/*"],
+      "js": [
+        "reload.js",
+        "inject.js",
+        "content.js",
+        "auto-pull.js"
+      ]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["icon16.png", "icon48.png", "icon128.png"],
+      "matches": ["https://atendimento.fibranetbrasil.com.br/*"]
+    }
+  ]
+}
