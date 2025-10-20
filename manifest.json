@@ -1,31 +1,25 @@
 {
   "manifest_version": 3,
-  "name": "Opa&SGP",
-  "version": "1.0",
-  "description": "Recursos adicionais para o OpaSuite! Com integração ao SGP.",
-  "permissions": ["activeTab", "scripting"],
+  "name": "Opa&SGP Extension",
+  "version": "1.37",
+  "description": "Extensão para facilitar e agilizar o atendimento no Opa! Suite e SGP",
+  "permissions": ["storage", "scripting", "tabs"],
   "action": {
-    "default_icon": {
-      "16": "icon16.png",
-      "48": "icon48.png",
-      "128": "icon128.png"
-    }
+    "default_popup": "settings.html"
+  },
+   "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
   },
   "content_scripts": [
     {
       "matches": ["https://atendimento.fibranetbrasil.com.br/*"],
       "js": [
-        "reload.js",
-        "inject.js",
-        "content.js",
-        "auto-pull.js"
+        "sgpIntegration.js",
+        "fastTransfer.js",
+        "betterNotifications.js"
       ]
-    }
-  ],
-  "web_accessible_resources": [
-    {
-      "resources": ["icon16.png", "icon48.png", "icon128.png"],
-      "matches": ["https://atendimento.fibranetbrasil.com.br/*"]
     }
   ]
 }

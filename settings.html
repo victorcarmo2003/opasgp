@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Configurações Opa&SGP</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      width: 320px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: #333;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dark {
+      background: linear-gradient(135deg, #2c3e50 0%, #1a2634 100%);
+      color: #e0e0e0;
+    }
+
+    h1 {
+      font-size: 20px;
+      margin: 0 0 20px;
+      text-align: center;
+      font-weight: 600;
+      color: inherit;
+    }
+
+    .setting {
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+    }
+
+    .setting:hover {
+      transform: translateY(-2px);
+    }
+
+    .dark .setting {
+      background: rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    label {
+      font-size: 14px;
+      flex-grow: 1;
+      color: inherit;
+    }
+
+    .toggle {
+      position: relative;
+      width: 50px;
+      height: 24px;
+      background: #ccc;
+      border-radius: 24px;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .toggle input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 24px;
+      transition: background 0.3s;
+    }
+
+    .slider::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border-radius: 50%;
+      top: 2px;
+      left: 2px;
+      transition: transform 0.3s, background 0.3s;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .toggle input:checked + .slider {
+      background: #3499eb;
+    }
+
+    .toggle input:checked + .slider::before {
+      transform: translateX(26px);
+      background: #fff;
+    }
+
+    .dark .toggle {
+      background: #555;
+    }
+
+    .dark .toggle input:checked + .slider {
+      background: #4a90e2;
+    }
+
+    button#themeToggle {
+      background: #3499eb;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      width: 100%;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background 0.3s, transform 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    button#themeToggle:hover {
+      background: #2878c3;
+      transform: translateY(-2px);
+    }
+
+    .dark button#themeToggle {
+      background: #4a90e2;
+    }
+
+    .dark button#themeToggle:hover {
+      background: #357abd;
+    }
+  </style>
+</head>
+<body>
+  <h1>Configurações Opa&SGP</h1>
+  <div class="setting">
+    <label for="betterNotificationEnabled">Notificação Aprimorada</label>
+    <div class="toggle">
+      <input type="checkbox" id="betterNotificationEnabled">
+      <span class="slider"></span>
+    </div>
+  </div>
+  <div class="setting">
+    <label for="sgpButtonEnabled">Botão "Visualizar no SGP"</label>
+    <div class="toggle">
+      <input type="checkbox" id="sgpButtonEnabled">
+      <span class="slider"></span>
+    </div>
+  </div>
+  <div class="setting">
+    <label for="fastTransferEnabled">Transferência Rápida</label>
+    <div class="toggle">
+      <input type="checkbox" id="fastTransferEnabled">
+      <span class="slider"></span>
+    </div>
+  </div>
+  <button id="themeToggle">Alternar Tema</button>
+  <script src="settings.js"></script>
+</body>
+</html>
