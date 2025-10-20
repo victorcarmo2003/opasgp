@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Opa&SGP Extension",
-  "version": "1.37",
+  "version": "1.372",
   "description": "Extensão para facilitar e agilizar o atendimento no Opa! Suite e SGP",
   "permissions": ["storage", "scripting", "tabs"],
   "action": {
@@ -16,9 +16,11 @@
     {
       "matches": ["https://atendimento.fibranetbrasil.com.br/*"],
       "js": [
+        "utils.js",
         "sgpIntegration.js",
         "fastTransfer.js",
-        "betterNotifications.js"
+        "betterNotifications.js",
+        "componentes/messageTemplates.js"
       ]
     }
   ]
