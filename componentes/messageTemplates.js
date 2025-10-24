@@ -100,6 +100,12 @@
   // Carrega mensagens salvas ou usa padrão
   function getMessages() {
     try {
+      // Verifica se __opaUtils está disponível
+      if (!window.__opaUtils || !window.__opaUtils.cache) {
+        console.warn('[MessageTemplates] __opaUtils não disponível, usando mensagens padrão');
+        return DEFAULT_MESSAGES;
+      }
+      
       const saved = window.__opaUtils.cache.get('messageTemplates');
       return saved || DEFAULT_MESSAGES;
     } catch (error) {
@@ -111,10 +117,18 @@
   // Salva mensagens personalizadas
   function saveMessages(messages) {
     try {
+      // Verifica se __opaUtils está disponível
+      if (!window.__opaUtils || !window.__opaUtils.cache) {
+        console.warn('[MessageTemplates] __opaUtils não disponível, não é possível salvar mensagens');
+        return false;
+      }
+      
       window.__opaUtils.cache.set('messageTemplates', messages);
       console.log('[MessageTemplates] Mensagens salvas:', messages.length);
+      return true;
     } catch (error) {
       console.error('[MessageTemplates] Erro ao salvar mensagens:', error);
+      return false;
     }
   }
 
@@ -342,6 +356,20 @@
   // Inicializa componente
   function initializeComponent() {
     console.log('[MessageTemplates] Inicializando componente...');
+
+    // Verifica se __opaUtils está disponível
+    if (!window.__opaUtils) {
+      console.warn('[MessageTemplates] __opaUtils não disponível, aguardando...');
+      // Aguarda um pouco mais e tenta novamente
+      setTimeout(() => {
+        if (window.__opaUtils) {
+          initializeComponent();
+        } else {
+          console.error('[MessageTemplates] __opaUtils não disponível após timeout');
+        }
+      }, 1000);
+      return;
+    }
 
     // Configurações iniciais
     setupObservationModal();

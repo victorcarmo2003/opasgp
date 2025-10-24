@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste da Extensão Opa&SGP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .test-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0056b3;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .dialog_panel {
+            border: 2px solid #007bff;
+            padding: 15px;
+            margin: 10px 0;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .botoes {
+            margin-top: 10px;
+        }
+        .chat {
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+        }
+        .notif {
+            display: inline-block;
+            margin-left: 10px;
+        }
+        .notif i.notifica {
+            color: red;
+            font-weight: bold;
+        }
+        .data_hora_ultima_msg {
+            font-size: 12px;
+            color: #666;
+        }
+        .list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Teste da Extensão Opa&SGP</h1>
+    
+    <div class="test-container">
+        <h2>📋 Status dos Módulos</h2>
+        <div id="module-status"></div>
+    </div>
+
+    <div class="test-container">
+        <h2>🔧 Testes de Funcionalidade</h2>
+        <button class="test-button" onclick="testSgpButton()">Testar Botão SGP</button>
+        <button class="test-button" onclick="testFastTransfer()">Testar Transferência Rápida</button>
+        <button class="test-button" onclick="testMessageTemplates()">Testar Templates de Mensagem</button>
+        <button class="test-button" onclick="testBetterNotifications()">Testar Notificações Aprimoradas</button>
+        <button class="test-button" onclick="clearTests()">Limpar Testes</button>
+    </div>
+
+    <div class="test-container">
+        <h2>🎭 Simulação de Interface Opa!</h2>
+        
+        <!-- Simulação de painel de atendimento -->
+        <div class="dialog_panel">
+            <h3>Painel de Atendimento</h3>
+            <p>Cliente ID: <span class="client-id">12345</span></p>
+            <div class="botoes">
+                <button>Botão Original</button>
+                <!-- Aqui devem aparecer os botões da extensão -->
+            </div>
+        </div>
+
+        <!-- Simulação de lista de chats -->
+        <div class="list">
+            <div class="chat" data-id="chat1">
+                <strong>Cliente João</strong>
+                <span class="notif">
+                    <i class="notifica">🔔</i>
+                </span>
+                <div class="data_hora_ultima_msg">10:30</div>
+            </div>
+            <div class="chat" data-id="chat2">
+                <strong>Cliente Maria</strong>
+                <span class="notif">
+                    <i class="notifica">🔔</i>
+                </span>
+                <div class="data_hora_ultima_msg">10:25</div>
+            </div>
+            <div class="chat" data-id="chat3">
+                <strong>Cliente Pedro</strong>
+                <div class="data_hora_ultima_msg">10:20</div>
+            </div>
+        </div>
+
+        <!-- Simulação de modal de observação -->
+        <div id="observation-modal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 2px solid #007bff; border-radius: 8px; z-index: 1000;">
+            <h3>Nova Observação</h3>
+            <form name="new_atendimentoObservacao">
+                <div class="form-group">
+                    <label>Mensagem:</label>
+                    <textarea name="mensagem" rows="4" cols="50" placeholder="Digite sua observação..."></textarea>
+                </div>
+                <div class="botoes">
+                    <button type="button" onclick="closeObservationModal()">Cancelar</button>
+                    <button type="submit">Salvar</button>
+                </div>
+            </form>
+        </div>
+        
+        <button class="test-button" onclick="openObservationModal()">Abrir Modal de Observação</button>
+    </div>
+
+    <div class="test-container">
+        <h2>📊 Logs da Extensão</h2>
+        <div id="extension-logs" style="background: #f8f9fa; padding: 10px; border-radius: 4px; max-height: 200px; overflow-y: auto; font-family: monospace; font-size: 12px;"></div>
+    </div>
+
+    <script>
+        // Interceptar console.log para mostrar logs da extensão
+        const originalLog = console.log;
+        const originalError = console.error;
+        const originalWarn = console.warn;
+        
+        function addToLogs(message, type = 'log') {
+            const logsDiv = document.getElementById('extension-logs');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.style.color = type === 'error' ? 'red' : type === 'warn' ? 'orange' : 'black';
+            logEntry.textContent = `[${timestamp}] ${message}`;
+            logsDiv.appendChild(logEntry);
+            logsDiv.scrollTop = logsDiv.scrollHeight;
+        }
+        
+        console.log = function(...args) {
+            originalLog.apply(console, args);
+            addToLogs(args.join(' '), 'log');
+        };
+        
+        console.error = function(...args) {
+            originalError.apply(console, args);
+            addToLogs(args.join(' '), 'error');
+        };
+        
+        console.warn = function(...args) {
+            originalWarn.apply(console, args);
+            addToLogs(args.join(' '), 'warn');
+        };
+
+        // Verificar status dos módulos
+        function checkModuleStatus() {
+            const statusDiv = document.getElementById('module-status');
+            const modules = [
+                { name: 'Utils', check: () => window.__opaUtils },
+                { name: 'SGP Integration', check: () => window.__opaSgpInjected },
+                { name: 'Fast Transfer', check: () => window.__opaFastTransferInjected },
+                { name: 'Message Templates', check: () => window.__opaMessageTemplatesInjected },
+                { name: 'Better Notifications', check: () => window.__opaBetterNotificationsInjected }
+            ];
+            
+            statusDiv.innerHTML = '';
+            
+            modules.forEach(module => {
+                const div = document.createElement('div');
+                div.className = 'status';
+                
+                if (module.check()) {
+                    div.classList.add('success');
+                    div.textContent = `✅ ${module.name}: Carregado`;
+                } else {
+                    div.classList.add('warning');
+                    div.textContent = `⚠️ ${module.name}: Não carregado`;
+                }
+                
+                statusDiv.appendChild(div);
+            });
+        }
+
+        // Testes de funcionalidade
+        function testSgpButton() {
+            console.log('🧪 Testando botão SGP...');
+            const sgpButton = document.querySelector('[data-sgp-button]');
+            if (sgpButton) {
+                console.log('✅ Botão SGP encontrado!');
+                sgpButton.click();
+            } else {
+                console.log('❌ Botão SGP não encontrado');
+            }
+        }
+
+        function testFastTransfer() {
+            console.log('🧪 Testando transferência rápida...');
+            const fastTransferButton = document.querySelector('.fast-transfer-button');
+            if (fastTransferButton) {
+                console.log('✅ Botão de transferência encontrado!');
+                fastTransferButton.click();
+            } else {
+                console.log('❌ Botão de transferência não encontrado');
+            }
+        }
+
+        function testMessageTemplates() {
+            console.log('🧪 Testando templates de mensagem...');
+            openObservationModal();
+            setTimeout(() => {
+                const templates = document.querySelectorAll('.message-template-btn');
+                if (templates.length > 0) {
+                    console.log(`✅ ${templates.length} templates encontrados!`);
+                    templates[0].click();
+                } else {
+                    console.log('❌ Templates de mensagem não encontrados');
+                }
+            }, 500);
+        }
+
+        function testBetterNotifications() {
+            console.log('🧪 Testando notificações aprimoradas...');
+            const enhancedChats = document.querySelectorAll('.chat.notification-enhanced');
+            if (enhancedChats.length > 0) {
+                console.log(`✅ ${enhancedChats.length} chats com notificações aprimoradas encontrados!`);
+            } else {
+                console.log('❌ Notificações aprimoradas não encontradas');
+            }
+        }
+
+        function openObservationModal() {
+            document.getElementById('observation-modal').style.display = 'block';
+        }
+
+        function closeObservationModal() {
+            document.getElementById('observation-modal').style.display = 'none';
+        }
+
+        function clearTests() {
+            document.getElementById('extension-logs').innerHTML = '';
+            console.log('🧹 Logs limpos');
+        }
+
+        // Verificar status inicial
+        setTimeout(checkModuleStatus, 1000);
+        
+        // Verificar status periodicamente
+        setInterval(checkModuleStatus, 5000);
+        
+        console.log('🚀 Página de teste carregada');
+    </script>
+</body>
+</html>

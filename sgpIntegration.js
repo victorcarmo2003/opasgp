@@ -10,13 +10,34 @@
 
   // Cria botão SGP com funcionalidades aprimoradas
   function createSgpButton() {
+    // Verifica se __opaUtils está disponível
+    if (!window.__opaUtils || !window.__opaUtils.config) {
+      console.warn('[SGP Integration] __opaUtils não disponível, usando configuração padrão');
+      // Usa configuração padrão se __opaUtils não estiver disponível
+      const settings = { sgpButtonEnabled: true };
+      if (!settings.sgpButtonEnabled) {
+        console.log('[SGP Integration] Botão SGP desabilitado nas configurações');
+        return;
+      }
+      initializeSgpButton();
+      return;
+    }
+    
     window.__opaUtils.config.get({ sgpButtonEnabled: true }).then(settings => {
       if (!settings.sgpButtonEnabled) {
         console.log('[SGP Integration] Botão SGP desabilitado nas configurações');
         return;
       }
 
-      isEnabled = true;
+      initializeSgpButton();
+    }).catch(error => {
+      console.error('[SGP Integration] Erro configurações:', error);
+      // Fallback: inicializa mesmo com erro
+      initializeSgpButton();
+    });
+  }
+  
+  function initializeSgpButton() {
 
       // Monitor básico que dispara a cada mudança
       const basicObserver = new MutationObserver((mutations) => {
@@ -54,13 +75,27 @@
       });
 
       console.log('[SGP Integration] Observer ativo');
-    }).catch(error => {
-      console.error('[SGP Integration] Erro configurações:', error);
-    });
   }
 
   // Função auxiliar para extrair ClientId
   function extractClientIdFromElement(element) {
+    if (!element) return null;
+    
+    // Verifica se __opaUtils está disponível
+    if (!window.__opaUtils || !window.__opaUtils.dom) {
+      console.warn('[SGP] __opaUtils não disponível, usando método alternativo');
+      // Método alternativo sem __opaUtils
+      const allElements = element.querySelectorAll('*');
+      for (const el of allElements) {
+        const text = el.textContent || el.innerText || '';
+        const match = text.match(/(\d+)/);
+        if (match && match[1].length >= 3) {
+          return match[1];
+        }
+      }
+      return null;
+    }
+    
     // Busca qualquer elemento com números
     const allElements = element.querySelectorAll('*');
     for (const el of allElements) {
